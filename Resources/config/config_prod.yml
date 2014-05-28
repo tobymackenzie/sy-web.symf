@@ -1,0 +1,11 @@
+#==Monolog
+monolog:
+ handlers:
+  main:
+   action_level: error
+   handler:   nested
+   type:   fingers_crossed
+  nested:
+   level: debug
+   path:  %kernel.logs_dir%/%kernel.environment%.log
+   type:  stream
