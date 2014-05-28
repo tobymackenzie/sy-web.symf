@@ -1,5 +1,6 @@
 {
 	"name": "tjm/symfony-standard-edition-bundle"
+	,"description": "Bundle that attempts to hold as much of the logic of Symfony Standard Edition as possible, so it is easy to update."
 	,"authors": [
 		{
 			"name": "Toby Mackenzie"
