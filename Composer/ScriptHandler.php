@@ -27,7 +27,7 @@ class ScriptHandler{
 	}
 	public static function runCommands($commands, Event $event){
 		foreach($commands as $command){
-			$event->getComposer()->getEventDispatcher()->dispatchCommandEvent($command, $event->isDevMode());
+			forward_static_call($command, $event);
 		}
 	}
 }
