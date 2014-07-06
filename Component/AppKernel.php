@@ -2,7 +2,6 @@
 namespace TJM\Bundle\StandardEditionBundle\Component;
 
 use Symfony\Component\Config\Loader\LoaderInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Kernel;
 // use TJM\StandardEditionBundle\Component\Config;
 
@@ -38,33 +37,5 @@ class AppKernel extends Kernel{
 
 	public function registerContainerConfiguration(LoaderInterface $loader){
 		$loader->load(Config::getPath('app') . '/config/config_' . $this->getEnvironment() . '.yml');
-	}
-
-	/*=====
-	==process requests
-	=====*/
-	/*
-	Method: processRequest
-	Process a request in the standard edition fashion.
-	Parameters:
-		options(Map):
-			cache(Boolean): whether to use an AppCache
-			request(Request): specify an alternative request to process
-	*/
-	public function processRequest($options = Array()){
-		$kernel = $this;
-		$kernel->loadClassCache();
-		if(isset($options['cache']) && $options['cache'] === true){
-			//-# untested
-			$kernel = new \AppCache($kernel);
-		}
-		if(isset($options['request'])){
-			$request = $options['request'];
-		}else{
-			$request = Request::createFromGlobals();
-		}
-		$response = $kernel->handle($request);
-		$response->send();
-		$kernel->terminate($request, $response);
 	}
 }
