@@ -26,6 +26,20 @@ class ScriptHandler{
 		self::runCommands(self::$symfonyStandardPostUpdateCommands, $event);
 	}
 	public static function runCommands($commands, Event $event){
+		//--merge 'extra' from this package into root 'extra' before passing on to other commands
+		$thisExtra = null;
+		foreach($event->getComposer()->getRepositoryManager()->getLocalRepository()->findPackages('tjm/symfony-standard-edition-bundle') as $package){
+			if($package instanceof \Composer\Package\CompletePackage){
+				$thisExtra = $package->getExtra();
+				break;
+			}
+		}
+		$rootPackage = $event->getComposer()->getPackage();
+		$rootExtra = $rootPackage->getExtra();
+		$extra = array_merge($thisExtra, $rootExtra);
+		$rootPackage->setExtra($extra);
+
+		//--call commands from Symfony Standard Edition
 		foreach($commands as $command){
 			forward_static_call($command, $event);
 		}
