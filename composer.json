@@ -12,7 +12,6 @@
 		"psr-4": {
 			"TJM\\Bundle\\StandardEditionBundle\\": ""
 		}
-		,"files": ["Resources/app/init.php"]
 	}
 	,"extra": {
 		"symfony-app-dir": "app"
