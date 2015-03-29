@@ -332,8 +332,8 @@ class AppBase{
 	protected $environment;
 	protected function getEnvironment(){
 		if(!isset($this->environment)){
-			$this->environment = (defined(__NAMESPACE__ . '\SYMFONY_ENVIRONMENT'))
-				? constant(__NAMESPACE__ . '\SYMFONY_ENVIRONMENT')
+			$this->environment = (defined(__NAMESPACE__ . '\ENVIRONMENT'))
+				? constant(__NAMESPACE__ . '\ENVIRONMENT')
 				: 'prod'
 			;
 		}
