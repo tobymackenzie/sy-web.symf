@@ -329,8 +329,14 @@ class AppBase{
 	Property: environment
 	Environment for Symfony kernel.
 	*/
-	protected $environment = 'prod';
+	protected $environment;
 	protected function getEnvironment(){
+		if(!isset($this->environment)){
+			$this->environment = (defined(__NAMESPACE__ . 'SYMFONY_ENVIRONMENT'))
+				? constant(__NAMESPACE__ . 'SYMFONY_ENVIRONMENT')
+				: 'prod'
+			;
+		}
 		return $this->environment;
 	}
 	protected function setEnvironment($environment){
