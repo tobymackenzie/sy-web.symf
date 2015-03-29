@@ -5,7 +5,6 @@ use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Debug\Debug;
-use TJM\Bundle\StandardEditionBundle\Component\AppKernel;
 use BadMethodCallException;
 
 class AppBase{
@@ -92,6 +91,7 @@ class AppBase{
 			,new \Doctrine\Bundle\DoctrineBundle\DoctrineBundle()
 			,new \Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle()
 		);
+
 		if(in_array($this->getEnvironment(), array('dev', 'test'))) {
 			$bundles[] = new \Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
 			$bundles[] = new \Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
@@ -156,8 +156,15 @@ class AppBase{
 	Property: kernel
 	*/
 	protected $kernel;
-	protected function createKernel(){
-		return new AppKernel($this->getEnvironment(), ($this->getDebug()));
+	protected function createKernel($class = null){
+		if(!$class){
+			$class = $this->getKernelClass();
+		}
+		//--load class from app directory if it doesn't exist.  Needed because we can't load AppKernel in autoloader or classes defined in bootstrap will already be defined.
+		if(!class_exists($class)){
+			require_once($this->getPath('app') . '/' . $class . '.php');
+		}
+		return new $class($this->getEnvironment(), ($this->getDebug()));
 	}
 	protected function getKernel(){
 		if(!$this->hasKernel()){
@@ -170,6 +177,19 @@ class AppBase{
 	}
 	protected function setKernel($kernel){
 		$this->kernel = $kernel;
+		return $this;
+	}
+
+	/*
+	Property: kernelClass
+	Class to use when calling `createKernel()`
+	*/
+	protected $kernelClass = 'AppKernel';
+	protected function getKernelClass(){
+		return $this->kernelClass;
+	}
+	protected function setKernelClass($class){
+		$this->kernelClass = $class;
 		return $this;
 	}
 
