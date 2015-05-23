@@ -14,24 +14,28 @@ class AppBase{
 		//--config
 		$this->set($opts);
 
-		//---paths
+		//---default paths
+		if(!$this->hasPath('project')){
+			if($this->hasPath('app')){
+				$this->setPath('project', $this->getPath('app') . '/..');
+			}else{
+				$this->setPath('project', ($this->isCli())
+					? exec('pwd')
+					: $_SERVER['DOCUMENT_ROOT'].'/..'
+				);
+			}
+		}
 		if(!$this->hasPath('app')){
-			$this->setPath('app', ($this->isCli())
-				? exec('pwd') . '/app'
-				: $_SERVER['DOCUMENT_ROOT'].'/../app'
-			);
+			$this->setPath('app', $this->getPath('project') . '/app');
 		}
 		if(!$this->hasPath('PHPCLI')){
 			$this->setPath('PHPCLI', "/usr/bin/env php");
 		}
 		if(!$this->hasPath('src')){
-			$this->setPath('src', $this->getPath('app') . "/../src");
+			$this->setPath('src', $this->getPath('project') . "/src");
 		}
 		if(!$this->hasPath('vendor')){
-			$this->setPath('vendor', $this->getPath('app') . "/../vendor");
-		}
-		if(!$this->hasPath('tjmSEBundle')){
-			$this->setPath('tjmSEBundle', __DIR__ . '/../../Resources');
+			$this->setPath('vendor', $this->getPath('project') . "/vendor");
 		}
 
 		//--operation
