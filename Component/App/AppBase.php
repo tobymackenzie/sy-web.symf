@@ -106,6 +106,7 @@ class AppBase{
 
 	/*
 	Property: cache
+	Tells `runWeb()` whether to use Symfony's `HttpCache` or not.  If set to a non-boolean value, will compare to `$environment` to determine whether to use the cache.  Once instantiated, `$cache` will be the actual `AppCache` object.
 	*/
 	protected $cache = false;
 	protected function getCache(){
@@ -281,7 +282,7 @@ class AppBase{
 		$kernel = $this->getKernel();
 		$kernel->loadClassCache();
 
-		if($this->getCache() === true){
+		if($this->getCache() && ($this->getCache() === true || $this->getCache() === $this->getEnvironment())){
 			$kernel = new \AppCache($kernel);
 			$this->setCache($kernel);
 			$this->setKernel($kernel);
