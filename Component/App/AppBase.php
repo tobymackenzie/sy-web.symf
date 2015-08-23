@@ -282,8 +282,9 @@ class AppBase{
 		$kernel->loadClassCache();
 
 		if($this->getCache() === true){
-			//-# untested
-			$this->setKernel(new \AppCache($kernel));
+			$kernel = new \AppCache($kernel);
+			$this->setCache($kernel);
+			$this->setKernel($kernel);
 		}
 
 		static::processRequest($kernel, $opts);
