@@ -14,30 +14,6 @@ class AppBase{
 		//--config
 		$this->set($opts);
 
-		//---default paths
-		if(!$this->hasPath('project')){
-			if($this->hasPath('app')){
-				$this->setPath('project', $this->getPath('app') . '/..');
-			}else{
-				$this->setPath('project', ($this->isCli())
-					? exec('pwd')
-					: $_SERVER['DOCUMENT_ROOT'].'/..'
-				);
-			}
-		}
-		if(!$this->hasPath('app')){
-			$this->setPath('app', $this->getPath('project') . '/app');
-		}
-		if(!$this->hasPath('PHPCLI')){
-			$this->setPath('PHPCLI', "/usr/bin/env php");
-		}
-		if(!$this->hasPath('src')){
-			$this->setPath('src', $this->getPath('project') . "/src");
-		}
-		if(!$this->hasPath('vendor')){
-			$this->setPath('vendor', $this->getPath('project') . "/vendor");
-		}
-
 		//--operation
 		if(isset($opts['run']) && $opts['run']){
 			$this->run();
@@ -375,7 +351,36 @@ class AppBase{
 		return $this;
 	}
 	protected function getPath($name){
-		return ($this->hasPath($name)) ? $this->paths[$name] : null;
+		if($this->hasPath($name)){
+			return $this->paths[$name];
+		}else{
+			//--default paths
+			switch($name){
+				case 'project':
+					if($this->hasPath('app')){
+						$this->setPath('project', $this->getPath('app') . '/..');
+					}else{
+						$this->setPath('project', ($this->isCli())
+							? exec('pwd')
+							: $_SERVER['DOCUMENT_ROOT'] . '/..'
+						);
+					}
+				break;
+				case 'app':
+					$this->setPath('app', $this->getPath('project') . '/app');
+				break;
+				case 'PHPCLI':
+					$this->setPath('PHPCLI', "/usr/bin/env php");
+				break;
+				case 'src':
+					$this->setPath('src', $this->getPath('project') . "/src");
+				break;
+				case 'vendor':
+					$this->setPath('vendor', $this->getPath('project') . "/vendor");
+				break;
+			}
+			return ($this->hasPath($name)) ? $this->paths[$name] : null;
+		}
 	}
 	protected function hasPath($name){
 		return (isset($this->paths[$name]));
