@@ -3,25 +3,36 @@ framework:
  router:
   resource: "%kernel.root_dir%/config/routing_dev.yml"
   strict_requirements: true
- profiler: { only_exceptions: false }
-
-#==Assetic
-assetic:
- use_controller: true
+ profiler: {only_exceptions: false}
 
 #==Monolog
 monolog:
  handlers:
+  # chromephp:
+  #  level: info
+  #  type:  chromephp
+  console:
+   bubble: false
+   channels: ['!doctrine']
+   type: console
+   verbosity_levels:
+    VERBOSITY_VERBOSE: INFO
+    VERBOSITY_VERY_VERBOSE: DEBUG
+  console_very_verbose:
+   bubble: false
+   channels: ['doctrine']
+   type: console
+   verbosity_levels:
+    VERBOSITY_DEBUG: DEBUG
+    VERBOSITY_VERBOSE: NOTICE
+    VERBOSITY_VERY_VERBOSE: NOTICE
+  # firephp:
+  #  level: info
+  #  type:  firephp
   main:
-   type:  stream
-   path:  %kernel.logs_dir%/%kernel.environment%.log
    level: debug
-  firephp:
-   type:  firephp
-   level: info
-  chromephp:
-   type:  chromephp
-   level: info
+   path:  %kernel.logs_dir%/%kernel.environment%.log
+   type:  stream
 
 #==Web Profiler
 web_profiler:

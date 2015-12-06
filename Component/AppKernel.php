@@ -5,6 +5,12 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\HttpKernel\Kernel;
 use TJM\Bundle\StandardEditionBundle\Component\App\App;
 class AppKernel extends Kernel{
+	public function getCacheDir(){
+		return dirname($this->getRootDir()) . '/var/cache/' . $this->getEnvironment();
+	}
+	public function getLogDir(){
+		return dirname($this->getRootDir()) . '/var/logs';
+	}
 	public function getRootDir(){
 		if(!isset($this->rootDir)){
 			$this->rootDir = App::getPath('app');
