@@ -237,6 +237,9 @@ class AppBase{
 		}else{
 			$this->setDebug(getenv('SYMFONY_DEBUG') !== '0' && $input->hasParameterOption(array('--debug', '')));
 		}
+		if($this->getDebug()){
+			Debug::enable();
+		}
 
 		$kernel = $this->getKernel();
 		$consoleApp = $this->getConsoleApp();
