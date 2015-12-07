@@ -23,7 +23,7 @@ doctrine:
 framework:
  assets: ~
  csrf_protection: ~
- default_locale: '%locale'
+ default_locale: '%locale%'
  #esi:    ~
  form: ~
  fragments: ~
