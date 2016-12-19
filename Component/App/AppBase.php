@@ -144,7 +144,11 @@ class AppBase{
 		if(!class_exists($class)){
 			require_once($this->getPath('app') . '/' . $class . '.php');
 		}
-		return new $class($this->getEnvironment(), ($this->getDebug()));
+		if(is_subclass_of($class, 'TJM\Bundle\StandardEditionBundle\Component\AppKernel')){
+			return new $class($this);
+		}else{
+			return new $class($this->getEnvironment(), ($this->getDebug()));
+		}
 	}
 	protected function getKernel(){
 		if(!$this->hasKernel()){

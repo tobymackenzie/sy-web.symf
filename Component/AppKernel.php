@@ -5,6 +5,14 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\HttpKernel\Kernel;
 use TJM\Bundle\StandardEditionBundle\Component\App\App;
 class AppKernel extends Kernel{
+	protected $appContainer;
+	public function __construct(App $appContainer = null){
+		if(!$appContainer){
+			$appContainer = App::getSingleton();
+		}
+		$this->appContainer = $appContainer;
+		parent::__construct($appContainer->getEnvironment(), $appContainer->getDebug());
+	}
 	public function getCacheDir(){
 		return dirname($this->getRootDir()) . '/var/cache/' . $this->getEnvironment();
 	}
@@ -13,7 +21,7 @@ class AppKernel extends Kernel{
 	}
 	public function getRootDir(){
 		if(!isset($this->rootDir)){
-			$this->rootDir = App::getPath('app');
+			$this->rootDir = $this->appContainer->getPath('app');
 		}
 		return $this->rootDir;
 	}
@@ -22,10 +30,10 @@ class AppKernel extends Kernel{
 	==initialization
 	=====*/
 	public function registerBundles(){
-		return App::initBundles();
+		return $this->appContainer->initBundles();
 	}
 
 	public function registerContainerConfiguration(LoaderInterface $loader){
-		$loader->load(App::getConfigPath($this->getEnvironment()));
+		$loader->load($this->appContainer->getConfigPath($this->getEnvironment()));
 	}
 }
