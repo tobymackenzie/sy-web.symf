@@ -6,12 +6,20 @@ use Symfony\Component\HttpKernel\Kernel;
 use TJM\Bundle\StandardEditionBundle\Component\App\App;
 class AppKernel extends Kernel{
 	protected $appContainer;
-	public function __construct(App $appContainer = null){
-		if(!$appContainer){
-			$appContainer = App::getSingleton();
+	public function __construct($appContainerOrEnv = null, $debug = null){
+		if(!$appContainerOrEnv){
+			$appContainerOrEnv = App::getSingleton();
+		}elseif(is_string($appContainerOrEnv)){
+			//--support symfony kernel interface.  We need a better way to go about this.  This is a stopgap
+			$env = $appContainerOrEnv;
+			$appContainerOrEnv = App::getSingleton();
+			$appContainerOrEnv->setEnvironment($env);
+			if($debug){
+				$appContainerOrEnv->setDebug($debug);
+			}
 		}
-		$this->appContainer = $appContainer;
-		parent::__construct($appContainer->getEnvironment(), $appContainer->getDebug());
+		$this->appContainer = $appContainerOrEnv;
+		parent::__construct($appContainerOrEnv->getEnvironment(), $appContainerOrEnv->getDebug());
 	}
 	public function getCacheDir(){
 		return dirname($this->getRootDir()) . '/var/cache/' . $this->getEnvironment();
