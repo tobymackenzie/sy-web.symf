@@ -1,8 +1,7 @@
 #==Framework
 framework:
  router:
-  #-!! path should really use configured config folder
-  resource: "%kernel.root_dir%/Resources/config/routing_dev.yml"
+  resource: "%tjm.kernel.config_dir%/routing_dev.yml"
   strict_requirements: true
  profiler: {only_exceptions: false}
 

@@ -29,15 +29,13 @@ framework:
  fragments: ~
  http_method_override: true
  router:
-  #-!! path should really use configured config folder
-  resource: '%kernel.root_dir%/Resources/config/routing.yml'
+  resource: '%tjm.kernel.config_dir%/routing.yml'
   strict_requirements: ~
  secret: %secret%
  # serializer: {enable_annotations: true}
  session:
   handler_id: ~
-  #-!! path should really use configured var folder
-  save_path: '%kernel.root_dir%/../../var/sessions/%kernel.environment%'
+  save_path: '%tjm.kernel.var_dir%/sessions/%kernel.environment%'
  templating: {engines: ['twig']} #assets_version: SomeVersionScheme
  #translator:   {fallback: %locale%}
  trusted_hosts: ~
