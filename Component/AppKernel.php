@@ -22,10 +22,10 @@ class AppKernel extends Kernel{
 		parent::__construct($appContainerOrEnv->getEnvironment(), $appContainerOrEnv->getDebug());
 	}
 	public function getCacheDir(){
-		return dirname($this->getRootDir()) . '/var/cache/' . $this->getEnvironment();
+		return App::getPath('var') . '/cache/' . $this->getEnvironment();
 	}
 	public function getLogDir(){
-		return dirname($this->getRootDir()) . '/var/logs';
+		return App::getPath('var') . '/logs';
 	}
 	public function getRootDir(){
 		if(!isset($this->rootDir)){
