@@ -6,10 +6,10 @@ use Symfony\Component\HttpKernel\Kernel;
 use TJM\Bundle\StandardEditionBundle\Component\App\App;
 class AppKernel extends Kernel{
 	public function getCacheDir(){
-		return dirname($this->getRootDir()) . '/var/cache/' . $this->getEnvironment();
+		return App::getPath('var') . '/cache/' . $this->getEnvironment();
 	}
 	public function getLogDir(){
-		return dirname($this->getRootDir()) . '/var/logs';
+		return App::getPath('var') . '/logs';
 	}
 	public function getRootDir(){
 		if(!isset($this->rootDir)){

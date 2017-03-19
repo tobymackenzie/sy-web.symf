@@ -100,7 +100,7 @@ class AppBase{
 		if(!$env){
 			$env = $this->getEnvironment();
 		}
-		return $this->getPath('app') . '/config/config_' . $env . '.yml';
+		return $this->getPath('config') . '/config_' . $env . '.yml';
 	}
 	/*
 	Property: consoleApp
@@ -358,6 +358,9 @@ class AppBase{
 		}else{
 			//--default paths
 			switch($name){
+				case 'config':
+					$this->setPath('config', $this->getPath('app') . '/config');
+				break;
 				case 'project':
 					if($this->hasPath('app')){
 						$this->setPath('project', $this->getPath('app') . '/..');
@@ -376,6 +379,9 @@ class AppBase{
 				break;
 				case 'src':
 					$this->setPath('src', $this->getPath('project') . "/src");
+				break;
+				case 'var':
+					$this->setPath('var', $this->getPath('project') . '/var');
 				break;
 				case 'vendor':
 					$this->setPath('vendor', $this->getPath('project') . "/vendor");
