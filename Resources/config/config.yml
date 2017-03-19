@@ -29,13 +29,15 @@ framework:
  fragments: ~
  http_method_override: true
  router:
-  resource: '%kernel.root_dir%/config/routing.yml'
+  #-!! path should really use configured config folder
+  resource: '%kernel.root_dir%/Resources/config/routing.yml'
   strict_requirements: ~
  secret: %secret%
  # serializer: {enable_annotations: true}
  session:
   handler_id: ~
-  save_path: '%kernel.root_dir%/../var/sessions/%kernel.environment%'
+  #-!! path should really use configured var folder
+  save_path: '%kernel.root_dir%/../../var/sessions/%kernel.environment%'
  templating: {engines: ['twig']} #assets_version: SomeVersionScheme
  #translator:   {fallback: %locale%}
  trusted_hosts: ~
