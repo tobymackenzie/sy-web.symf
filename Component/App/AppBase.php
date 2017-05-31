@@ -262,7 +262,6 @@ class AppBase{
 		}
 
 		$kernel = $this->getKernel();
-		$kernel->loadClassCache();
 
 		if($this->getCache() && ($this->getCache() === true || $this->getCache() === $this->getEnvironment())){
 			$kernel = new \AppCache($kernel);
