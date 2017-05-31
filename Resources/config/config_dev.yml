@@ -31,7 +31,7 @@ monolog:
   #  type:  firephp
   main:
    level: debug
-   path:  %kernel.logs_dir%/%kernel.environment%.log
+   path:  '%kernel.logs_dir%/%kernel.environment%.log'
    type:  stream
 
 #==Web Profiler
