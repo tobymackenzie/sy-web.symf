@@ -22,16 +22,16 @@ class AppKernel extends Kernel{
 		parent::__construct($appContainerOrEnv->getEnvironment(), $appContainerOrEnv->getDebug());
 	}
 	public function getCacheDir(){
-		return App::getPath('var') . '/cache/' . $this->getEnvironment();
+		return $this->appContainer->getPath('var') . '/cache/' . $this->getEnvironment();
 	}
 	protected function getKernelParameters(){
 		$params = parent::getKernelParameters();
-		$params['tjm.kernel.config_dir'] = App::getPath('config');
-		$params['tjm.kernel.var_dir'] = App::getPath('var');
+		$params['tjm.kernel.config_dir'] = $this->appContainer->getPath('config');
+		$params['tjm.kernel.var_dir'] = $this->appContainer->getPath('var');
 		return $params;
 	}
 	public function getLogDir(){
-		return App::getPath('var') . '/logs';
+		return $this->appContainer->getPath('var') . '/logs';
 	}
 	public function getRootDir(){
 		if(!isset($this->rootDir)){
