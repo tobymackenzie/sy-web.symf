@@ -16,6 +16,6 @@
 	,"license": "BSD-3-Clause"
 	,"require": {
 		"php": ">=5.3.3"
-		,"symfony/symfony": ">=2.0"
+		,"symfony/symfony": ">=3.0"
 	}
 }

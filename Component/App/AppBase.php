@@ -147,11 +147,7 @@ class AppBase{
 		if(!$class){
 			$class = $this->getKernelClass();
 		}
-		//--load class from app directory if it doesn't exist.  Needed because we can't load AppKernel in autoloader or classes defined in bootstrap will already be defined.
-		if(!class_exists($class)){
-			require_once($this->getPath('app') . '/' . $class . '.php');
-		}
-		if(is_subclass_of($class, 'TJM\Bundle\StandardEditionBundle\Component\AppKernel')){
+		if(is_a($class, 'TJM\Bundle\StandardEditionBundle\Component\AppKernel', true)){
 			return new $class($this);
 		}else{
 			return new $class($this->getEnvironment(), ($this->getDebug()));
@@ -175,7 +171,7 @@ class AppBase{
 	Property: kernelClass
 	Class to use when calling `createKernel()`
 	*/
-	protected $kernelClass = 'AppKernel';
+	protected $kernelClass = 'TJM\Bundle\StandardEditionBundle\Component\AppKernel';
 	protected function getKernelClass(){
 		return $this->kernelClass;
 	}
