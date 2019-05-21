@@ -96,25 +96,25 @@ class AppBase{
 	protected function initStandardEditionBundles(){
 		$bundles = array(
 			//--this
-			new TJMStandardEditionBundle()
+			TJMStandardEditionBundle::class
 			//--standard
 			//---framework
-			,new \Symfony\Bundle\FrameworkBundle\FrameworkBundle()
+			,'Symfony\Bundle\FrameworkBundle\FrameworkBundle'
 			//---standard symfony
-			,new \Symfony\Bundle\SecurityBundle\SecurityBundle()
-			,new \Symfony\Bundle\TwigBundle\TwigBundle()
-			,new \Symfony\Bundle\MonologBundle\MonologBundle()
-			,new \Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle()
-			,new \Doctrine\Bundle\DoctrineBundle\DoctrineBundle()
-			,new \Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle()
+			,'Symfony\Bundle\SecurityBundle\SecurityBundle'
+			,'Symfony\Bundle\TwigBundle\TwigBundle'
+			,'Symfony\Bundle\MonologBundle\MonologBundle'
+			,'Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle'
+			,'Doctrine\Bundle\DoctrineBundle\DoctrineBundle'
+			,'Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle'
 		);
 
 		if(in_array($this->getEnvironment(), array('dev', 'test'))) {
-			$bundles[] = new \Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
-			$bundles[] = new \Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
-			$bundles[] = new \Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
+			$bundles[] = 'Symfony\Bundle\WebProfilerBundle\WebProfilerBundle';
+			$bundles[] = 'Sensio\Bundle\DistributionBundle\SensioDistributionBundle';
+			$bundles[] = 'Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle';
 		}
-		return $bundles;
+		return $this->initBundles($bundles);
 	}
 	protected function setBundlesList($bundles){
 		$this->bundlesList = $bundles;
