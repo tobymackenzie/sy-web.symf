@@ -33,6 +33,9 @@ class AppKernel extends Kernel{
 	public function getLogDir(){
 		return $this->appContainer->getPath('var') . '/logs';
 	}
+	public function getProjectDir(){
+		return $this->appContainer->getPath('project');
+	}
 	public function getRootDir(){
 		if(!isset($this->rootDir)){
 			$this->rootDir = $this->appContainer->getPath('app');
