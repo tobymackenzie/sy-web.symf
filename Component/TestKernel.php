@@ -1,7 +1,7 @@
 <?php
 /*
 class: TestKernel
-Use for phpunit unit tests with 'symfony/phpunit-bridge'.  Required because the bridge instantiates a class from string, and we need to get our instance its `App`.
+Use for phpunit unit tests with 'symfony/phpunit-bridge'.  Required because the bridge instantiates a class from string, and we need to get our instance its `App`.  Requires a global `$app` to be our `App` instance.
 */
 namespace TJM\Bundle\StandardEditionBundle\Component;
 use TJM\Bundle\StandardEditionBundle\Component\App\App;
