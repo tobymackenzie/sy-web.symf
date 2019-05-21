@@ -1,11 +1,11 @@
 <?php
 namespace TJM\Bundle\StandardEditionBundle\Component\App;
-
+use BadMethodCallException;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Debug\Debug;
-use BadMethodCallException;
+use TJM\Bundle\StandardEditionBundle\TJMStandardEditionBundle;
 
 class AppBase{
 	public function __construct($opts = Array()){
@@ -23,7 +23,14 @@ class AppBase{
 	/*=====
 	==config
 	=====*/
+	protected $bundlesList = Array(
+		'@standard'
+		,'@this'
+	);
 	protected function set($opts = Array()){
+		if(isset($opts['bundles'])){
+			$this->setBundlesList($opts['bundles']);
+		}
 		if(isset($opts['debug'])){
 			$this->setDebug($opts['debug']);
 		}
@@ -54,10 +61,32 @@ class AppBase{
 	Method: initBundles
 	Instantiates bundles and returns them as Array for Symfony's kernel.  Override to change which bundles are loaded.
 	*/
-	protected function initBundles(){
-		$bundles = $this->initStandardEditionBundles();
-		$bundles[] = new \TJM\Bundle\StandardEditionBundle\TJMStandardEditionBundle();
-		return $bundles;
+	protected function initBundles($bundles = null){
+		if(!$bundles){
+			$bundles = $this->bundlesList;
+		}
+		$initedBundles = [];
+		foreach($bundles as $key=> $value){
+			//--allow arrays like symfony 4
+			if(is_string($key) && is_array($value)){
+				if(!in_array($this->getEnvironment(), $value) && $value !== 'all'){
+					continue;
+				}
+				$bundle = $key;
+			}else{
+				$bundle = $value;
+			}
+			if(is_object($bundle)){
+				$initedBundles[] = $bundle;
+			}elseif($bundle === '@standard'){
+				$initedBundles = array_merge($initedBundles, $this->initStandardEditionBundles());
+			}else{
+				if(class_exists($bundle)){
+					$initedBundles[] = new $bundle();
+				}
+			}
+		}
+		return $initedBundles;
 	}
 
 	/*
@@ -66,9 +95,11 @@ class AppBase{
 	*/
 	protected function initStandardEditionBundles(){
 		$bundles = array(
+			//--this
+			new TJMStandardEditionBundle()
 			//--standard
 			//---framework
-			new \Symfony\Bundle\FrameworkBundle\FrameworkBundle()
+			,new \Symfony\Bundle\FrameworkBundle\FrameworkBundle()
 			//---standard symfony
 			,new \Symfony\Bundle\SecurityBundle\SecurityBundle()
 			,new \Symfony\Bundle\TwigBundle\TwigBundle()
@@ -84,6 +115,10 @@ class AppBase{
 			$bundles[] = new \Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
 		}
 		return $bundles;
+	}
+	protected function setBundlesList($bundles){
+		$this->bundlesList = $bundles;
+		return $this;
 	}
 
 	/*
