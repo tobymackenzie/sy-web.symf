@@ -30,6 +30,13 @@ class AppBase{
 		if(isset($opts['environment'])){
 			$this->setEnvironment($opts['environment']);
 		}
+		if(isset($opts['kernel'])){
+			if(is_object($opts['kernel'])){
+				$this->setKernel($opts['kernel']);
+			}else{
+				$this->setKernelClass($opts['kernel']);
+			}
+		}
 		if(isset($opts['loader'])){
 			$this->setLoader($opts['loader']);
 		}
