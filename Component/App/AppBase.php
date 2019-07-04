@@ -400,33 +400,36 @@ class AppBase{
 			//--default paths
 			switch($name){
 				case 'config':
-					$this->setPath('config', $this->getPath('app') . '/config');
+					$path = $this->getPath('app') . '/config';
 				break;
 				case 'project':
 					if($this->hasPath('app')){
-						$this->setPath('project', $this->getPath('app') . '/..');
+						$path = $this->getPath('app') . '/..';
 					}else{
-						$this->setPath('project', ($this->isCli())
+						$path = ($this->isCli())
 							? exec('pwd')
 							: $_SERVER['DOCUMENT_ROOT'] . '/..'
-						);
+						;
 					}
 				break;
 				case 'app':
-					$this->setPath('app', $this->getPath('project') . '/app');
+					$path = $this->getPath('project') . '/app';
 				break;
 				case 'PHPCLI':
-					$this->setPath('PHPCLI', "/usr/bin/env php");
+					$path = "/usr/bin/env php";
 				break;
 				case 'src':
-					$this->setPath('src', $this->getPath('project') . "/src");
+					$path = $this->getPath('project') . "/src";
 				break;
 				case 'var':
-					$this->setPath('var', $this->getPath('project') . '/var');
+					$path = $this->getPath('project') . '/var';
 				break;
 				case 'vendor':
-					$this->setPath('vendor', $this->getPath('project') . "/vendor");
+					$path = $this->getPath('project') . "/vendor";
 				break;
+			}
+			if(isset($path)){
+				$this->setPath($name, $path);
 			}
 			return ($this->hasPath($name)) ? $this->paths[$name] : null;
 		}
