@@ -415,6 +415,15 @@ class AppBase{
 				case 'app':
 					$path = $this->getPath('project') . '/app';
 				break;
+				case 'cache':
+					$path = $this->getPath('var') . '/cache';
+				break;
+				case 'cache.env':
+					$path = $this->getPath('cache.' . $this->getEnvironment());
+				break;
+				case 'logs':
+					$path = $this->getPath('var') . '/logs';
+				break;
 				case 'PHPCLI':
 					$path = "/usr/bin/env php";
 				break;
@@ -426,6 +435,11 @@ class AppBase{
 				break;
 				case 'vendor':
 					$path = $this->getPath('project') . "/vendor";
+				break;
+				default:
+					if(preg_match('/^cache\.([\w-]+)/', $name, $matches)){
+						$path = $this->getPath('cache') . '/' . $matches[1];
+					}
 				break;
 			}
 			if(isset($path)){

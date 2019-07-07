@@ -22,7 +22,7 @@ class AppKernel extends Kernel{
 		parent::__construct($appContainerOrEnv->getEnvironment(), $appContainerOrEnv->getDebug());
 	}
 	public function getCacheDir(){
-		return $this->appContainer->getPath('var') . '/cache/' . $this->getEnvironment();
+		return $this->appContainer->getPath('cache.' . $this->getEnvironment());
 	}
 	protected function getKernelParameters(){
 		$params = parent::getKernelParameters();
@@ -31,7 +31,7 @@ class AppKernel extends Kernel{
 		return $params;
 	}
 	public function getLogDir(){
-		return $this->appContainer->getPath('var') . '/logs';
+		return $this->appContainer->getPath('logs');
 	}
 	public function getProjectDir(){
 		return $this->appContainer->getPath('project');
