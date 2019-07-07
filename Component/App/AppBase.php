@@ -47,6 +47,9 @@ class AppBase{
 		if(isset($opts['loader'])){
 			$this->setLoader($opts['loader']);
 		}
+		if(isset($opts['name'])){
+			$this->setName($opts['name']);
+		}
 		if(isset($opts['paths'])){
 			$this->mergeInPaths($opts['paths']);
 		}
@@ -381,6 +384,19 @@ class AppBase{
 	}
 
 	/*
+	Property: name
+	Name of app, as used for cache, logs, front controller, etc.
+	*/
+	protected $name;
+	public function getName(){
+		return $this->name;
+	}
+	protected function setName($value){
+		$this->name = $value;
+		return $this;
+	}
+
+	/*
 	Property: paths
 	Collection of paths to be used in early lifecycle
 	*/
@@ -422,7 +438,7 @@ class AppBase{
 					$path = $this->getPath('cache.' . $this->getEnvironment());
 				break;
 				case 'logs':
-					$path = $this->getPath('var') . '/logs';
+					$path = $this->getPath('var') . '/logs' . ($this->getName() ? '/' . $this->getName() : '');
 				break;
 				case 'PHPCLI':
 					$path = "/usr/bin/env php";
@@ -438,7 +454,7 @@ class AppBase{
 				break;
 				default:
 					if(preg_match('/^cache\.([\w-]+)/', $name, $matches)){
-						$path = $this->getPath('cache') . '/' . $matches[1];
+						$path = $this->getPath('cache') . '/' . ($this->getName() ? $this->getName() . '.' : '') . $matches[1];
 					}
 				break;
 			}
