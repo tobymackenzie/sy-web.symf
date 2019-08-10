@@ -251,6 +251,25 @@ class AppBase{
 	==operation
 	=====*/
 	/*
+	Method: isAllowedToRunWeb
+	Check if we're allowed to run web.  By default this blocks requests for dev environment except on localhost.
+	-! this should be configurable without subclassing
+	*/
+	protected function isAllowedToRunWeb(){
+		if(
+			$this->getEnvironment() === 'dev'
+			&& (
+				isset($_SERVER['HTTP_CLIENT_IP'])
+				|| isset($_SERVER['HTTP_X_FORWARDED_FOR'])
+				|| !(in_array(@$_SERVER['REMOTE_ADDR'], ['127.0.0.1', '::1']))
+			)
+		){
+			return false;
+		}
+		return true;
+	}
+
+	/*
 	Method: run
 	Run application
 	*/
@@ -298,6 +317,10 @@ class AppBase{
 	Run web application
 	*/
 	protected function runWeb($opts = Array()){
+		if(!$this->isAllowedToRunWeb()){
+			header('HTTP/1.0 403 Forbidden');
+			exit('You are not allowed to access this file. Check App for more information.');
+		}
 		if($this->getEnvironment() === 'dev'){
 			Debug::enable();
 		}
