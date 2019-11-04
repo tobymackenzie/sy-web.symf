@@ -16,6 +16,11 @@
 	,"license": "BSD-3-Clause"
 	,"require": {
 		"php": ">=5.4"
-		,"symfony/symfony": ">=3.0"
+		,"symfony/http-kernel": ">=3.0"
+	}
+	,"suggest": {
+		"symfony/console": ""
+		,"symfony/debug": ""
+		,"symfony/framework-bundle": ""
 	}
 }
