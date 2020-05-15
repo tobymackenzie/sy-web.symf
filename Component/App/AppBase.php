@@ -4,7 +4,8 @@ use BadMethodCallException;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Debug\Debug;
+use Symfony\Component\Debug\Debug as OldDebug;
+use Symfony\Component\ErrorHandler\Debug;
 use TJM\Bundle\StandardEditionBundle\TJMStandardEditionBundle;
 
 class AppBase{
@@ -269,6 +270,14 @@ class AppBase{
 		return true;
 	}
 
+	protected function enabledDebug(){
+		if(class_exists(Debug::class)){
+			Debug::enable();
+		}elseif(class_exists(OldDebug::class)){
+			OldDebug::enable();
+		}
+	}
+
 	/*
 	Method: run
 	Run application
@@ -302,7 +311,7 @@ class AppBase{
 			$this->setDebug(getenv('SYMFONY_DEBUG') !== '0' && $input->hasParameterOption(array('--debug', '')));
 		}
 		if($this->getDebug()){
-			Debug::enable();
+			$this->enabledDebug();
 		}
 
 		$kernel = $this->getKernel();
@@ -322,7 +331,7 @@ class AppBase{
 			exit('You are not allowed to access this file. Check App for more information.');
 		}
 		if($this->getEnvironment() === 'dev'){
-			Debug::enable();
+			$this->enabledDebug();
 		}
 
 		$kernel = $this->getKernel();
