@@ -1,12 +1,11 @@
 <?php
-namespace TJM\Bundle\StandardEditionBundle\Component\App;
+namespace TJM\SyWeb;
 use BadMethodCallException;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Debug\Debug as OldDebug;
 use Symfony\Component\ErrorHandler\Debug;
-use TJM\Bundle\StandardEditionBundle\TJMStandardEditionBundle;
 
 class App{
 	public function __construct($opts = Array()){
@@ -26,7 +25,6 @@ class App{
 	=====*/
 	protected $bundlesList = Array(
 		'@standard'
-		,'@this'
 	);
 	protected function set($opts = Array()){
 		if(isset($opts['bundles'])){
@@ -99,11 +97,9 @@ class App{
 	*/
 	protected function initStandardEditionBundles(){
 		$bundles = array(
-			//--this
-			TJMStandardEditionBundle::class
 			//--standard
 			//---framework
-			,'Symfony\Bundle\FrameworkBundle\FrameworkBundle'
+			'Symfony\Bundle\FrameworkBundle\FrameworkBundle'
 			//---standard symfony
 			,'Symfony\Bundle\SecurityBundle\SecurityBundle'
 			,'Symfony\Bundle\TwigBundle\TwigBundle'
@@ -186,7 +182,7 @@ class App{
 		if(!$class){
 			$class = $this->getKernelClass();
 		}
-		if(is_a($class, 'TJM\Bundle\StandardEditionBundle\Component\AppKernel', true)){
+		if(is_a($class, 'TJM\SyWeb\AppKernel', true)){
 			return new $class($this);
 		}else{
 			return new $class($this->getEnvironment(), ($this->getDebug()));
@@ -210,7 +206,7 @@ class App{
 	Property: kernelClass
 	Class to use when calling `createKernel()`
 	*/
-	protected $kernelClass = 'TJM\Bundle\StandardEditionBundle\Component\AppKernel';
+	protected $kernelClass = 'TJM\SyWeb\AppKernel';
 	protected function getKernelClass(){
 		return $this->kernelClass;
 	}

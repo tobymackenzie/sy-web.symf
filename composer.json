@@ -1,6 +1,6 @@
 {
-	"name": "tjm/symfony-standard-edition-bundle"
-	,"description": "Container for otherwise boilerplate of Symfony projects."
+	"name": "tjm/sy-web"
+	,"description": "Base functionality for Symfony web projects."
 	,"authors": [
 		{
 			"name": "Toby Mackenzie"
@@ -10,7 +10,7 @@
 	]
 	,"autoload": {
 		"psr-4": {
-			"TJM\\Bundle\\StandardEditionBundle\\": ""
+			"TJM\\SyWeb\\": "src"
 		}
 	}
 	,"license": "BSD-3-Clause"

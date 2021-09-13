@@ -1,9 +1,9 @@
 <?php
-namespace TJM\Bundle\StandardEditionBundle\Component;
+namespace TJM\SyWeb;
 
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\HttpKernel\Kernel;
-use TJM\Bundle\StandardEditionBundle\Component\App\App;
+use TJM\SyWeb\App;
 class AppKernel extends Kernel{
 	protected $app;
 	public function __construct($appOrEnv = null, $debug = null){
