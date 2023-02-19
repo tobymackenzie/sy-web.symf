@@ -27,6 +27,9 @@ class App{
 		'@standard'
 	);
 	protected function set($opts = Array()){
+		if(isset($opts['allowedDevIPs'])){
+			$this->setAllowedDevIPs($opts['allowedDevIPs']);
+		}
 		if(isset($opts['bundles'])){
 			$this->setBundlesList($opts['bundles']);
 		}
@@ -248,9 +251,17 @@ class App{
 	==operation
 	=====*/
 	/*
+	Property: allowedDevIPs
+	IPs that can access dev environment
+	*/
+	protected $allowedDevIPs = ['127.0.0.1', '::1'];
+	public function setAllowedDevIPs(array $value = null){
+		$this->allowedDevIPs = $value;
+	}
+
+	/*
 	Method: isAllowedToRunWeb
 	Check if we're allowed to run web.  By default this blocks requests for dev environment except on localhost.
-	-! this should be configurable without subclassing
 	*/
 	protected function isAllowedToRunWeb(){
 		if(
@@ -258,7 +269,7 @@ class App{
 			&& (
 				isset($_SERVER['HTTP_CLIENT_IP'])
 				|| isset($_SERVER['HTTP_X_FORWARDED_FOR'])
-				|| !(in_array(@$_SERVER['REMOTE_ADDR'], ['127.0.0.1', '::1']))
+				|| !(in_array(@$_SERVER['REMOTE_ADDR'], $this->allowedDevIPs))
 			)
 		){
 			return false;
