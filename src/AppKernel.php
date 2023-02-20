@@ -21,19 +21,19 @@ class AppKernel extends Kernel{
 		$this->app = $appOrEnv;
 		parent::__construct($appOrEnv->getEnvironment(), $appOrEnv->getDebug());
 	}
-	public function getCacheDir(){
+	public function getCacheDir() :string{
 		return $this->app->getPath('cache.' . $this->getEnvironment());
 	}
-	protected function getKernelParameters(){
+	protected function getKernelParameters() :array{
 		$params = parent::getKernelParameters();
 		$params['tjm.kernel.config_dir'] = $this->app->getPath('config');
 		$params['tjm.kernel.var_dir'] = $this->app->getPath('var');
 		return $params;
 	}
-	public function getLogDir(){
+	public function getLogDir() :string{
 		return $this->app->getPath('logs');
 	}
-	public function getProjectDir(){
+	public function getProjectDir() :string{
 		return $this->app->getPath('project');
 	}
 	public function getRootDir(){
@@ -46,7 +46,7 @@ class AppKernel extends Kernel{
 	/*=====
 	==initialization
 	=====*/
-	public function registerBundles(){
+	public function registerBundles() :iterable{
 		return $this->app->initBundles();
 	}
 
