@@ -277,7 +277,7 @@ class App{
 		return true;
 	}
 
-	protected function enabledDebug(){
+	protected function enableDebug(){
 		if(class_exists(Debug::class)){
 			Debug::enable();
 		}elseif(class_exists(OldDebug::class)){
@@ -318,7 +318,7 @@ class App{
 			$this->setDebug(getenv('SYMFONY_DEBUG') !== '0' && $input->hasParameterOption(array('--debug', '')));
 		}
 		if($this->getDebug()){
-			$this->enabledDebug();
+			$this->enableDebug();
 		}
 
 		$kernel = $this->getKernel();
@@ -338,7 +338,7 @@ class App{
 			exit('You are not allowed to access this file. Check App for more information.');
 		}
 		if($this->getEnvironment() === 'dev'){
-			$this->enabledDebug();
+			$this->enableDebug();
 		}
 
 		$kernel = $this->getKernel();
