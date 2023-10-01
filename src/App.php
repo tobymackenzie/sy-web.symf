@@ -383,18 +383,13 @@ class App{
 	Return response for request or path, mainly for CLI usage
 	-! Do we want to use this for `runWeb()`?
 	*/
-	public function getResponse($request = null, $forceProd = false) :Response{
+	public function getResponse($request = null) :Response{
 		if(empty($request)){
 			$request = Request::createFromGlobals();
 		}elseif(is_string($request)){
 			$request = Request::create($request);
 		}
-		if(!$forceProd || $this->getKernel()->getEnvironment() === 'prod'){
-			$kernel = $this->getKernel();
-		}else{
-			$kernel = $this->createKernel(null, 'prod');
-		}
-		return $kernel->handle($request);
+		return $this->getKernel()->handle($request);
 	}
 
 	/*=====
