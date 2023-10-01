@@ -6,16 +6,16 @@ use PHPUnit\Framework\TestCase;
 class AppTest extends TestCase{
 	public function testDebug(){
 		$app = new App();
-		$this->assertEquals($app->getDebug(), false);
+		$this->assertEquals(false, $app->getDebug());
 		$app = new App();
 		$app->setEnvironment('dev');
-		$this->assertEquals($app->getDebug(), true);
+		$this->assertEquals(true, $app->getDebug());
 	}
 	public function testEnvironment(){
 		$app = new App();
-		$this->assertEquals($app->getEnvironment(), 'prod');
+		$this->assertEquals('prod', $app->getEnvironment());
 		$app->setEnvironment('dev');
-		$this->assertEquals($app->getEnvironment(), 'dev');
+		$this->assertEquals('dev', $app->getEnvironment());
 	}
 	public function testPaths(){
 		$app = new App();
