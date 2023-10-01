@@ -145,7 +145,7 @@ class App{
 		if(!$env){
 			$env = $this->getEnvironment();
 		}
-		return $this->getPath('config') . '/config_' . $env . '.yml';
+		return $this->getPath('config.' . $env);
 	}
 	/*
 	Property: consoleApp
@@ -497,6 +497,8 @@ class App{
 				default:
 					if(preg_match('/^cache\.([\w-]+)/', $name, $matches)){
 						$path = $this->getPath('cache') . '/' . ($this->getName() ? $this->getName() . '.' : '') . $matches[1];
+					}elseif(preg_match('/^config\.([\w-]+)$/', $name, $matches)){
+						$path = $this->getPath('config') . '/config_' . $matches[1] . '.yml';
 					}
 				break;
 			}
