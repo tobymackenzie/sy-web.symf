@@ -181,14 +181,17 @@ class App{
 	Property: kernel
 	*/
 	protected $kernel;
-	protected function createKernel($class = null){
+	protected function createKernel($class = null, $opts = null, $debug = null){
 		if(!$class){
 			$class = $this->getKernelClass();
 		}
+		if(!$opts){
+			$opts = $this;
+		}
 		if(is_a($class, 'TJM\SyWeb\AppKernel', true)){
-			return new $class($this);
+			return new $class($opts);
 		}else{
-			return new $class($this->getEnvironment(), ($this->getDebug()));
+			return new $class(is_object($opts) ? $opts->getEnvironment() : $opts, $debug ?? $opts->getDebug());
 		}
 	}
 	protected function getKernel(){
