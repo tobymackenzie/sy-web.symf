@@ -4,6 +4,7 @@ use BadMethodCallException;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Debug\Debug as OldDebug;
 use Symfony\Component\ErrorHandler\Debug;
 
@@ -375,6 +376,25 @@ class App{
 		$response = $kernel->handle($request);
 		$response->send();
 		$kernel->terminate($request, $response);
+	}
+
+	/*
+	Method: getResponse
+	Return response for request or path, mainly for CLI usage
+	-! Do we want to use this for `runWeb()`?
+	*/
+	public function getResponse($request = null, $forceProd = false) :Response{
+		if(empty($request)){
+			$request = Request::createFromGlobals();
+		}elseif(is_string($request)){
+			$request = Request::create($request);
+		}
+		if(!$forceProd || $this->getKernel()->getEnvironment() === 'prod'){
+			$kernel = $this->getKernel();
+		}else{
+			$kernel = $this->createKernel(null, 'prod');
+		}
+		return $kernel->handle($request);
 	}
 
 	/*=====
