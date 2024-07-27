@@ -27,7 +27,7 @@ class App{
 	protected $bundlesList = Array(
 		'@standard'
 	);
-	protected function set($opts = Array()){
+	public function set($opts = Array()){
 		if(isset($opts['allowedDevIPs'])){
 			$this->setAllowedDevIPs($opts['allowedDevIPs']);
 		}
@@ -67,7 +67,7 @@ class App{
 	Method: initBundles
 	Instantiates bundles and returns them as Array for Symfony's kernel.  Override to change which bundles are loaded.
 	*/
-	protected function initBundles($bundles = null){
+	public function initBundles($bundles = null){
 		if(!$bundles){
 			$bundles = $this->bundlesList;
 		}
@@ -120,7 +120,7 @@ class App{
 		}
 		return $this->initBundles($bundles);
 	}
-	protected function setBundlesList($bundles){
+	public function setBundlesList($bundles){
 		$this->bundlesList = $bundles;
 		return $this;
 	}
@@ -130,10 +130,10 @@ class App{
 	Tells `runWeb()` whether to use Symfony's `HttpCache` or not.  If set to a non-boolean value, will compare to `$environment` to determine whether to use the cache.  Once instantiated, `$cache` will be the actual `AppCache` object.
 	*/
 	protected $cache = false;
-	protected function getCache(){
+	public function getCache(){
 		return $this->cache;
 	}
-	protected function setCache($cache){
+	public function setCache($cache){
 		$this->cache = $cache;
 		return $this;
 	}
@@ -142,7 +142,7 @@ class App{
 	Method: getConfigPath
 	Get path to symfony config file.
 	*/
-	protected function getConfigPath($env = null){
+	public function getConfigPath($env = null){
 		if(!$env){
 			$env = $this->getEnvironment();
 		}
@@ -153,19 +153,19 @@ class App{
 	Console application instance.
 	*/
 	protected $consoleApp;
-	protected function createConsoleApp(){
+	public function createConsoleApp(){
 		return new Application($this->getKernel());
 	}
-	protected function getConsoleApp(){
+	public function getConsoleApp(){
 		if(!$this->hasConsoleApp()){
 			$this->setConsoleApp($this->createConsoleApp());
 		}
 		return $this->consoleApp;
 	}
-	protected function hasConsoleApp(){
+	public function hasConsoleApp(){
 		return (isset($this->consoleApp));
 	}
-	protected function setConsoleApp($consoleApp){
+	public function setConsoleApp($consoleApp){
 		$this->consoleApp = $consoleApp;
 		return $this;
 	}
@@ -182,7 +182,7 @@ class App{
 	Property: kernel
 	*/
 	protected $kernel;
-	protected function createKernel($class = null, $opts = null, $debug = null){
+	public function createKernel($class = null, $opts = null, $debug = null){
 		if(!$class){
 			$class = $this->getKernelClass();
 		}
@@ -195,16 +195,16 @@ class App{
 			return new $class(is_object($opts) ? $opts->getEnvironment() : $opts, $debug ?? $opts->getDebug());
 		}
 	}
-	protected function getKernel(){
+	public function getKernel(){
 		if(!$this->hasKernel()){
 			$this->setKernel($this->createKernel());
 		}
 		return $this->kernel;
 	}
-	protected function hasKernel(){
+	public function hasKernel(){
 		return (isset($this->kernel));
 	}
-	protected function setKernel($kernel){
+	public function setKernel($kernel){
 		$this->kernel = $kernel;
 		return $this;
 	}
@@ -214,10 +214,10 @@ class App{
 	Class to use when calling `createKernel()`
 	*/
 	protected $kernelClass = 'TJM\SyWeb\AppKernel';
-	protected function getKernelClass(){
+	public function getKernelClass(){
 		return $this->kernelClass;
 	}
-	protected function setKernelClass($class){
+	public function setKernelClass($class){
 		$this->kernelClass = $class;
 		return $this;
 	}
@@ -227,10 +227,10 @@ class App{
 	Reference to composer loader or equivalent.
 	*/
 	protected $loader;
-	protected function getLoader(){
+	public function getLoader(){
 		return $this->loader;
 	}
-	protected function setLoader($loader){
+	public function setLoader($loader){
 		$this->loader = $loader;
 		return $this;
 	}
@@ -240,10 +240,10 @@ class App{
 	Value to set umask to.  By default, doesn't set it to anything.  See [Setting up permissions](http://symfony.com/doc/current/book/installation.html#configuration-and-setup).
 	*/
 	protected $umask = false;
-	protected function getUmask(){
+	public function getUmask(){
 		return $this->umask;
 	}
-	protected function setUmask($value){
+	public function setUmask($value){
 		if($value === true){
 			$value = 0;
 		}
@@ -293,7 +293,7 @@ class App{
 	Method: run
 	Run application
 	*/
-	protected function run($opts = Array()){
+	public function run($opts = Array()){
 		if($this->isCli()){
 			return $this->runConsole($opts);
 		}else{
@@ -308,7 +308,7 @@ class App{
 	Method: runConsole
 	Run console application
 	*/
-	protected function runConsole(){
+	public function runConsole(){
 		set_time_limit(0);
 
 		$input = new ArgvInput();
@@ -333,7 +333,7 @@ class App{
 	Method: runWeb
 	Run web application
 	*/
-	protected function runWeb($opts = Array()){
+	public function runWeb($opts = Array()){
 		if(!$this->isAllowedToRunWeb()){
 			header('HTTP/1.0 403 Forbidden');
 			exit('You are not allowed to access this file. Check App for more information.');
@@ -397,13 +397,13 @@ class App{
 	Whether to enable Symfony debugging or not.
 	*/
 	protected $debug;
-	protected function getDebug(){
+	public function getDebug(){
 		if(!isset($this->debug)){
 			$this->debug = ($this->getEnvironment() !== 'prod');
 		}
 		return $this->debug;
 	}
-	protected function setDebug($debug){
+	public function setDebug($debug){
 		$this->debug = $debug;
 		return $this;
 	}
@@ -412,7 +412,7 @@ class App{
 	Environment for Symfony kernel.
 	*/
 	protected $environment;
-	protected function getEnvironment(){
+	public function getEnvironment(){
 		if(!isset($this->environment)){
 			$this->environment = (defined(__NAMESPACE__ . '\ENVIRONMENT'))
 				? constant(__NAMESPACE__ . '\ENVIRONMENT')
@@ -421,7 +421,7 @@ class App{
 		}
 		return $this->environment;
 	}
-	protected function setEnvironment($environment){
+	public function setEnvironment($environment){
 		$this->environment = $environment;
 		return $this;
 	}
@@ -455,7 +455,7 @@ class App{
 	Collection of paths to be used in early lifecycle
 	*/
 	protected $paths = Array();
-	protected function addPaths($paths){
+	public function addPaths($paths){
 		foreach($paths as $name=> $path){
 			if(!$this->hasPath($name)){
 				$this->setPath($name, $path);
@@ -463,7 +463,7 @@ class App{
 		}
 		return $this;
 	}
-	protected function getPath($name){
+	public function getPath($name){
 		if($this->hasPath($name)){
 			return $this->paths[$name];
 		}else{
@@ -520,18 +520,18 @@ class App{
 			return ($this->hasPath($name)) ? $this->paths[$name] : null;
 		}
 	}
-	protected function hasPath($name){
+	public function hasPath($name){
 		return (isset($this->paths[$name]));
 	}
 	protected function mergeInPaths($paths){
 		$this->paths = array_merge($this->paths, $paths);
 		return $this;
 	}
-	protected function setPath($name, $value){
+	public function setPath($name, $value){
 		$this->paths[$name] = $value;
 		return $this;
 	}
-	protected function setPaths($paths){
+	public function setPaths($paths){
 		$this->paths = $paths;
 		return $this;
 	}
@@ -539,31 +539,6 @@ class App{
 	/*=====
 	==class operation
 	=====*/
-	/*
-	Method: __call
-	Call protected / private methods as if they were public.  Allows us to push those methods through `__callStatic()` when in a static context.
-	//-@ http://stackoverflow.com/a/3716750
-	*/
-	public function __call($name, $args){
-		if(method_exists($this, $name)){
-			return call_user_func_array(Array($this, $name), $args);
-		}else{
-			throw new BadMethodCallException('Attempting to call ' . $name . '.  Method does not exist.');
-		}
-	}
-
-	/*
-	Static Method: __callStatic
-	Call method of singleton instance if method isn't defined.  Note: All methods must be protected and go through `__call()` for this to work properly.  Otherwise PHP will run the non-static methods in a static context and never hit `__callStatic()`.
-	*/
-	static public function __callStatic($name, $args){
-		if(self::$singletonInstance === null && $name === 'set'){
-			$instance = static::getSingleton($args[0]);
-			return $instance;
-		}else{
-			return self::callStatic($name, $args);
-		}
-	}
 	static public function callStatic($name, $args = null){
 		$instance = static::getSingleton();
 		if(method_exists($instance, $name)){
