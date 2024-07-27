@@ -300,6 +300,9 @@ class App{
 			return $this->runWeb($opts);
 		}
 	}
+	protected function invoke(array $opts = []){
+		return $this->run($opts);
+	}
 
 	/*
 	Method: runConsole
