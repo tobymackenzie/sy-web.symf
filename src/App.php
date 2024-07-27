@@ -293,17 +293,11 @@ class App{
 	Method: run
 	Run application
 	*/
-	protected function run($type, $opts = Array()){
-		switch($type){
-			case 'web':
-				return $this->runWeb($opts);
-			break;
-			case 'console':
-				return $this->runConsole($opts);
-			break;
-			default:
-				throw new \Exception("Calling `run()` on class 'App'.  Behavior undefined.");
-			break;
+	protected function run($opts = Array()){
+		if($this->isCli()){
+			return $this->runConsole($opts);
+		}else{
+			return $this->runWeb($opts);
 		}
 	}
 
