@@ -300,7 +300,7 @@ class App{
 			return $this->runWeb($opts);
 		}
 	}
-	protected function invoke(array $opts = []){
+	protected function __invoke(array $opts = []){
 		return $this->run($opts);
 	}
 
