@@ -19,7 +19,8 @@
 		,"symfony/http-kernel": ">=3.0 <6.0"
 	}
 	,"require-dev": {
-		"symfony/framework-bundle": "<6.0"
+		"symfony/framework-bundle": "<6.0",
+		"tjm/dev": "*"
 	}
 	,"suggest": {
 		"symfony/console": ""
