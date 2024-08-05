@@ -284,7 +284,6 @@ class App{
 	*/
 	public function runConsole(){
 		set_time_limit(0);
-
 		$input = new ArgvInput();
 		$envArg = $input->getParameterOption(['--env', '-e'], null);
 		if(isset($envArg)){
@@ -295,11 +294,7 @@ class App{
 		}elseif(!$this->getDebug() && $input->hasParameterOption(['--debug'])){
 			$this->setDebug(true);
 		}
-
-		$kernel = $this->getKernel();
-		$consoleApp = $this->getConsoleApp();
-		$consoleApp->run($input);
-
+		$this->getConsoleApp()->run($input);
 		return $this;
 	}
 
@@ -315,8 +310,7 @@ class App{
 		if($this->getDebug()){
 			$this->enableDebug();
 		}
-		$kernel = $this->getKernel();
-		static::processRequest($kernel, $opts);
+		static::processRequest($this->getKernel(), $opts);
 		return $this;
 	}
 
