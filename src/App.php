@@ -40,6 +40,9 @@ class App{
 		if(isset($opts['environment'])){
 			$this->setEnvironment($opts['environment']);
 		}
+		if(isset($opts['isCli'])){
+			$this->isCli = $opts['isCli'];
+		}
 		if(isset($opts['kernel'])){
 			if(is_object($opts['kernel'])){
 				$this->setKernel($opts['kernel']);
@@ -283,14 +286,14 @@ class App{
 		set_time_limit(0);
 
 		$input = new ArgvInput();
-		$this->setEnvironment($input->getParameterOption(['--env', '-e'], getenv('SYMFONY_ENV') ?: 'dev'));
-		if($this->getEnvironment() !== 'prod'){
-			$this->setDebug(getenv('SYMFONY_DEBUG') !== '0' && !$input->hasParameterOption(['--no-debug', '']));
-		}else{
-			$this->setDebug(getenv('SYMFONY_DEBUG') !== '0' && $input->hasParameterOption(['--debug', '']));
+		$envArg = $input->getParameterOption(['--env', '-e'], null);
+		if(isset($envArg)){
+			$this->setEnvironment($envArg);
 		}
-		if($this->getDebug()){
-			$this->enableDebug();
+		if($this->getDebug() && $input->hasParameterOption(['--no-debug'])){
+			$this->setDebug(false);
+		}elseif(!$this->getDebug() && $input->hasParameterOption(['--debug'])){
+			$this->setDebug(true);
 		}
 
 		$kernel = $this->getKernel();
@@ -309,7 +312,7 @@ class App{
 			header('HTTP/1.0 403 Forbidden');
 			exit('You are not allowed to access this file. Check App for more information.');
 		}
-		if($this->getEnvironment() === 'dev'){
+		if($this->getDebug()){
 			$this->enableDebug();
 		}
 		$kernel = $this->getKernel();
@@ -360,7 +363,13 @@ class App{
 	protected $debug;
 	public function getDebug(){
 		if(!isset($this->debug)){
-			$this->debug = ($this->getEnvironment() !== 'prod');
+			if(getenv('APP_DEBUG') !== false){
+				$this->debug = getenv('APP_DEBUG');
+			}elseif(getenv('SYMFONY_DEBUG') !== false){
+				$this->debug = getenv('SYMFONY_DEBUG');
+			}else{
+				$this->debug = ($this->getEnvironment() !== 'prod');
+			}
 		}
 		return $this->debug;
 	}
@@ -375,10 +384,17 @@ class App{
 	protected $environment;
 	public function getEnvironment(){
 		if(!isset($this->environment)){
-			$this->environment = (defined(__NAMESPACE__ . '\ENVIRONMENT'))
-				? constant(__NAMESPACE__ . '\ENVIRONMENT')
-				: 'prod'
-			;
+			if(getenv('APP_ENV') !== false){
+				$this->environment = getenv('APP_ENV');
+			}elseif(getenv('SYMFONY_ENV') !== false){
+				$this->environment = getenv('SYMFONY_ENV');
+			}elseif(defined(__NAMESPACE__ . '\ENVIRONMENT')){
+				$this->environment = constant(__NAMESPACE__ . '\ENVIRONMENT');
+			}elseif($this->isCli()){
+				$this->environment = 'dev';
+			}else{
+				$this->environment = 'prod';
+			}
 		}
 		return $this->environment;
 	}
