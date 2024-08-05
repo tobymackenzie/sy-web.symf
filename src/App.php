@@ -9,7 +9,7 @@ use Symfony\Component\Debug\Debug as OldDebug;
 use Symfony\Component\ErrorHandler\Debug;
 
 class App{
-	public function __construct($opts = Array()){
+	public function __construct($opts = []){
 		$opts = array_merge($this->getDefaultOptions(), $opts);
 
 		//--config
@@ -24,10 +24,10 @@ class App{
 	/*=====
 	==config
 	=====*/
-	protected $bundlesList = Array(
+	protected $bundlesList = [
 		'@standard'
-	);
-	public function set($opts = Array()){
+	];
+	public function set($opts = []){
 		if(isset($opts['allowedDevIPs'])){
 			$this->setAllowedDevIPs($opts['allowedDevIPs']);
 		}
@@ -100,7 +100,7 @@ class App{
 	Instantiates Standard Edition bundles and returns them as Array for Symfony's kernel.
 	*/
 	protected function initStandardEditionBundles(){
-		$bundles = array(
+		$bundles = [
 			//--standard
 			//---framework
 			'Symfony\Bundle\FrameworkBundle\FrameworkBundle'
@@ -111,9 +111,9 @@ class App{
 			,'Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle'
 			,'Doctrine\Bundle\DoctrineBundle\DoctrineBundle'
 			,'Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle'
-		);
+		];
 
-		if(in_array($this->getEnvironment(), array('dev', 'test'))) {
+		if(in_array($this->getEnvironment(), ['dev', 'test'])) {
 			$bundles[] = 'Symfony\Bundle\WebProfilerBundle\WebProfilerBundle';
 			$bundles[] = 'Sensio\Bundle\DistributionBundle\SensioDistributionBundle';
 			$bundles[] = 'Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle';
@@ -162,7 +162,7 @@ class App{
 	Get default options for constructor.  Override to set default options.
 	*/
 	protected function getDefaultOptions(){
-		return Array();
+		return [];
 	}
 
 	/*
@@ -280,7 +280,7 @@ class App{
 	Method: run
 	Run application
 	*/
-	public function run($opts = Array()){
+	public function run($opts = []){
 		if($this->isCli()){
 			return $this->runConsole($opts);
 		}else{
@@ -299,11 +299,11 @@ class App{
 		set_time_limit(0);
 
 		$input = new ArgvInput();
-		$this->setEnvironment($input->getParameterOption(array('--env', '-e'), getenv('SYMFONY_ENV') ?: 'dev'));
+		$this->setEnvironment($input->getParameterOption(['--env', '-e'], getenv('SYMFONY_ENV') ?: 'dev'));
 		if($this->getEnvironment() !== 'prod'){
-			$this->setDebug(getenv('SYMFONY_DEBUG') !== '0' && !$input->hasParameterOption(array('--no-debug', '')));
+			$this->setDebug(getenv('SYMFONY_DEBUG') !== '0' && !$input->hasParameterOption(['--no-debug', '']));
 		}else{
-			$this->setDebug(getenv('SYMFONY_DEBUG') !== '0' && $input->hasParameterOption(array('--debug', '')));
+			$this->setDebug(getenv('SYMFONY_DEBUG') !== '0' && $input->hasParameterOption(['--debug', '']));
 		}
 		if($this->getDebug()){
 			$this->enableDebug();
@@ -320,7 +320,7 @@ class App{
 	Method: runWeb
 	Run web application
 	*/
-	public function runWeb($opts = Array()){
+	public function runWeb($opts = []){
 		if(!$this->isAllowedToRunWeb()){
 			header('HTTP/1.0 403 Forbidden');
 			exit('You are not allowed to access this file. Check App for more information.');
@@ -341,7 +341,7 @@ class App{
 		options(Map):
 			request(Request): specify an alternative request to process
 	*/
-	static public function processRequest($kernel, $opts = Array()){
+	static public function processRequest($kernel, $opts = []){
 		if(isset($opts['request'])){
 			$request = $opts['request'];
 		}else{
@@ -431,7 +431,7 @@ class App{
 	Property: paths
 	Collection of paths to be used in early lifecycle
 	*/
-	protected $paths = Array();
+	protected $paths = [];
 	public function addPaths($paths){
 		foreach($paths as $name=> $path){
 			if(!$this->hasPath($name)){
@@ -521,7 +521,7 @@ class App{
 	static public function callStatic($name, $args = null){
 		$instance = static::getSingleton();
 		if(method_exists($instance, $name)){
-			return call_user_func_array(Array($instance, $name), $args);
+			return call_user_func_array([$instance, $name], $args);
 		}else{
 			throw new BadMethodCallException();
 		}
@@ -533,7 +533,7 @@ class App{
 		$opts (Array|Optional): Array of options to pass to the constructor if not instantiated yet.
 	*/
 	static protected $singletonInstance;
-	static public function getSingleton($opts = Array()){
+	static public function getSingleton($opts = []){
 		//-# using 'self' ensures we get an instance of a child class if that is what has been gotten.
 		if(self::$singletonInstance === null){
 			self::$singletonInstance = new static($opts);
