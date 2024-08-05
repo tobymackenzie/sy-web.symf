@@ -47,9 +47,6 @@ class App{
 				$this->setKernelClass($opts['kernel']);
 			}
 		}
-		if(isset($opts['loader'])){
-			$this->setLoader($opts['loader']);
-		}
 		if(isset($opts['name'])){
 			$this->setName($opts['name']);
 		}
@@ -206,19 +203,6 @@ class App{
 	}
 	public function setKernelClass($class){
 		$this->kernelClass = $class;
-		return $this;
-	}
-
-	/*
-	Property: loader
-	Reference to composer loader or equivalent.
-	*/
-	protected $loader;
-	public function getLoader(){
-		return $this->loader;
-	}
-	public function setLoader($loader){
-		$this->loader = $loader;
 		return $this;
 	}
 
