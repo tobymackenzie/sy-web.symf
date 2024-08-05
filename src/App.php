@@ -493,8 +493,10 @@ class App{
 			}
 			if(isset($path)){
 				$this->setPath($name, $path);
+				return $path;
+			}else{
+				return null;
 			}
-			return ($this->hasPath($name)) ? $this->paths[$name] : null;
 		}
 	}
 	public function hasPath($name){
