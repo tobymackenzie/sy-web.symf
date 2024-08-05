@@ -126,19 +126,6 @@ class App{
 	}
 
 	/*
-	Property: cache
-	Tells `runWeb()` whether to use Symfony's `HttpCache` or not.  If set to a non-boolean value, will compare to `$environment` to determine whether to use the cache.  Once instantiated, `$cache` will be the actual `AppCache` object.
-	*/
-	protected $cache = false;
-	public function getCache(){
-		return $this->cache;
-	}
-	public function setCache($cache){
-		$this->cache = $cache;
-		return $this;
-	}
-
-	/*
 	Method: getConfigPath
 	Get path to symfony config file.
 	*/
@@ -341,17 +328,8 @@ class App{
 		if($this->getEnvironment() === 'dev'){
 			$this->enableDebug();
 		}
-
 		$kernel = $this->getKernel();
-
-		if($this->getCache() && ($this->getCache() === true || $this->getCache() === $this->getEnvironment())){
-			$kernel = new \AppCache($kernel);
-			$this->setCache($kernel);
-			$this->setKernel($kernel);
-		}
-
 		static::processRequest($kernel, $opts);
-
 		return $this;
 	}
 
@@ -361,7 +339,6 @@ class App{
 	Parameters:
 		kernel(KernelInterface): application kernel
 		options(Map):
-			cache(Boolean): whether to use an AppCache
 			request(Request): specify an alternative request to process
 	*/
 	static public function processRequest($kernel, $opts = Array()){
@@ -439,7 +416,7 @@ class App{
 
 	/*
 	Property: name
-	Name of app, as used for cache, logs, front controller, etc.
+	Name of app, as used for logs, front controller, etc.
 	*/
 	protected $name;
 	public function getName(){
