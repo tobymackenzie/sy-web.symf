@@ -13,7 +13,7 @@
 			"TJM\\SyWeb\\": "src"
 		}
 	}
-	,"license": "BSD-3-Clause"
+	,"license": "0BSD"
 	,"require": {
 		"php": ">=5.4"
 		,"symfony/http-kernel": ">=3.0 <6.0"
