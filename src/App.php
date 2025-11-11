@@ -233,7 +233,7 @@ class App{
 	IPs that can access dev environment
 	*/
 	protected $allowedDevIPs = ['127.0.0.1', '::1'];
-	public function setAllowedDevIPs(array $value = null){
+	public function setAllowedDevIPs(array $value = []){
 		$this->allowedDevIPs = $value;
 	}
 
