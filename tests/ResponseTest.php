@@ -10,7 +10,9 @@ class ResponseTest extends TestCase{
 	public function setUp(): void{
 		chdir(__DIR__);
 		mkdir(self::$projectPath);
-		$this->app = new App();
+		$this->app = new App([
+			'debug'=> false,
+		]);
 		$this->app
 			->setKernelClass(AppResponseKernel::class)
 			->setPath('project', self::$projectPath)

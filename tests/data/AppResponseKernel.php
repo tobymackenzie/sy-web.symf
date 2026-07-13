@@ -15,6 +15,9 @@ class AppResponseKernel extends AppKernel{
 	protected function configureContainer(ContainerConfigurator $container, LoaderInterface $loader){
 		$container->extension('framework', [
 			'secret'=> '12345',
+			'profiler'=> [
+				'collect'=> false,
+			],
 		]);
 	}
 	protected function configureRoutes(RoutingConfigurator $routes){
