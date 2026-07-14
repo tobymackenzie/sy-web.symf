@@ -8,6 +8,27 @@ use Symfony\Component\Debug\Debug as OldDebug;
 use Symfony\Component\ErrorHandler\Debug;
 
 class App{
+	protected $bundlesList = [
+		'@standard'
+	];
+	//--console application instance
+	protected $consoleApp;
+	//--whether to enable Symfony debugging or not
+	protected $debug;
+	//--environment for Symfony kernel
+	protected $environment;
+	//--whether app is being run as a CLI application
+	protected $isCli;
+	protected $kernel;
+	//--class to use when calling `createKernel()`
+	protected $kernelClass = 'TJM\SyWeb\AppKernel';
+	//--name of app, as used for logs, front controller, etc
+	protected $name;
+	//--collection of paths to be used in early lifecycle
+	protected $paths = [];
+	//--value to set umask to.  By default, doesn't set.  See [Setting up permissions docs](https://symfony.com/doc/current/setup/file_permissions.html).
+	protected $umask = false;
+
 	public function __construct($opts = []){
 		$opts = array_merge($this->getDefaultOptions(), $opts);
 
@@ -23,9 +44,6 @@ class App{
 	/*=====
 	==config
 	=====*/
-	protected $bundlesList = [
-		'@standard'
-	];
 	public function set($opts = []){
 		if(isset($opts['bundles'])){
 			$this->setBundlesList($opts['bundles']);
@@ -131,11 +149,7 @@ class App{
 		}
 		return $this->getPath('config.' . $env);
 	}
-	/*
-	Property: consoleApp
-	Console application instance.
-	*/
-	protected $consoleApp;
+
 	public function createConsoleApp(){
 		return new Application($this->getKernel());
 	}
@@ -161,10 +175,6 @@ class App{
 		return [];
 	}
 
-	/*
-	Property: kernel
-	*/
-	protected $kernel;
 	public function createKernel($class = null, $opts = null, $debug = null){
 		if(!$class){
 			$class = $this->getKernelClass();
@@ -192,11 +202,6 @@ class App{
 		return $this;
 	}
 
-	/*
-	Property: kernelClass
-	Class to use when calling `createKernel()`
-	*/
-	protected $kernelClass = 'TJM\SyWeb\AppKernel';
 	public function getKernelClass(){
 		return $this->kernelClass;
 	}
@@ -205,11 +210,6 @@ class App{
 		return $this;
 	}
 
-	/*
-	Property: umask
-	Value to set umask to.  By default, doesn't set it to anything.  See [Setting up permissions](http://symfony.com/doc/current/book/installation.html#configuration-and-setup).
-	*/
-	protected $umask = false;
 	public function getUmask(){
 		return $this->umask;
 	}
@@ -327,11 +327,6 @@ class App{
 	/*=====
 	==config
 	=====*/
-	/*
-	Property: debug
-	Whether to enable Symfony debugging or not.
-	*/
-	protected $debug;
 	public function getDebug(){
 		if(!isset($this->debug)){
 			if(getenv('APP_DEBUG') !== false){
@@ -348,11 +343,7 @@ class App{
 		$this->debug = $debug;
 		return $this;
 	}
-	/*
-	Property: environment
-	Environment for Symfony kernel.
-	*/
-	protected $environment;
+
 	public function getEnvironment(){
 		if(!isset($this->environment)){
 			if(getenv('APP_ENV') !== false){
@@ -373,11 +364,6 @@ class App{
 		$this->environment = $environment;
 		return $this;
 	}
-	/*
-	Property: isCli
-	Whether app is being run as a CLI application
-	*/
-	protected $isCli;
 	protected function isCli(){
 		if(!isset($this->isCli)){
 			$this->isCli = (php_sapi_name() == 'cli');
@@ -385,11 +371,6 @@ class App{
 		return $this->isCli;
 	}
 
-	/*
-	Property: name
-	Name of app, as used for logs, front controller, etc.
-	*/
-	protected $name;
 	public function getName(){
 		return $this->name;
 	}
@@ -398,11 +379,6 @@ class App{
 		return $this;
 	}
 
-	/*
-	Property: paths
-	Collection of paths to be used in early lifecycle
-	*/
-	protected $paths = [];
 	public function addPaths($paths){
 		foreach($paths as $name=> $path){
 			if(!$this->hasPath($name)){
