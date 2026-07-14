@@ -9,7 +9,7 @@ use TJM\SyWeb\AppKernel;
 
 class AppResponseKernel extends AppKernel{
 	use MicroKernelTrait;
-	public function __construct($appOrEnv = null, $debug = null){
+	public function __construct($appOrEnv = null, ?bool $debug = null){
 		parent::__construct($appOrEnv, $debug);
 	}
 	protected function configureContainer(ContainerConfigurator $container, LoaderInterface $loader){

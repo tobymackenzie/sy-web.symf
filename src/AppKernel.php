@@ -5,8 +5,8 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\HttpKernel\Kernel;
 use TJM\SyWeb\App;
 class AppKernel extends Kernel{
-	protected $app;
-	public function __construct($appOrEnv = null, $debug = null){
+	protected App $app;
+	public function __construct($appOrEnv = null, ?bool $debug = null){
 		if(!$appOrEnv){
 			$appOrEnv = App::getSingleton();
 		}elseif(is_string($appOrEnv)){

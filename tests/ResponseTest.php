@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 require_once(__DIR__ . '/data/AppResponseKernel.php');
 class ResponseTest extends TestCase{
 	static protected $projectPath = __DIR__ . '/tmp';
-	protected $app;
+	protected App $app;
 	public function setUp(): void{
 		chdir(__DIR__);
 		mkdir(self::$projectPath);

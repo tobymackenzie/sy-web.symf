@@ -4,30 +4,31 @@ use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Debug\Debug as OldDebug;
 use Symfony\Component\ErrorHandler\Debug;
 
 class App{
-	protected $bundlesList = [
+	protected array $bundlesList = [
 		'@standard'
 	];
 	//--console application instance
-	protected $consoleApp;
+	protected Application $consoleApp;
 	//--whether to enable Symfony debugging or not
-	protected $debug;
+	protected bool $debug;
 	//--environment for Symfony kernel
-	protected $environment;
+	protected string $environment;
 	//--whether app is being run as a CLI application
-	protected $isCli;
-	protected $kernel;
+	protected bool $isCli;
+	protected Kernel $kernel;
 	//--class to use when calling `createKernel()`
-	protected $kernelClass = 'TJM\SyWeb\AppKernel';
+	protected string $kernelClass = 'TJM\SyWeb\AppKernel';
 	//--name of app, as used for logs, front controller, etc
 	protected $name;
 	//--collection of paths to be used in early lifecycle
-	protected $paths = [];
+	protected array $paths = [];
 
-	public function __construct($opts = []){
+	public function __construct(array $opts = []){
 		$opts = array_merge($this->getDefaultOptions(), $opts);
 
 		//--config
@@ -42,7 +43,7 @@ class App{
 	/*=====
 	==config
 	=====*/
-	public function set($opts = []){
+	public function set(array $opts = []){
 		if(isset($opts['bundles'])){
 			$this->setBundlesList($opts['bundles']);
 		}
@@ -76,7 +77,7 @@ class App{
 	Method: initBundles
 	Instantiates bundles and returns them as Array for Symfony's kernel.  Override to change which bundles are loaded.
 	*/
-	public function initBundles($bundles = null){
+	public function initBundles(?array $bundles = null){
 		if(!$bundles){
 			$bundles = $this->bundlesList;
 		}
@@ -138,7 +139,7 @@ class App{
 	Method: getConfigPath
 	Get path to symfony config file.
 	*/
-	public function getConfigPath($env = null){
+	public function getConfigPath(?string $env = null){
 		if(!$env){
 			$env = $this->getEnvironment();
 		}
@@ -157,7 +158,7 @@ class App{
 	public function hasConsoleApp(){
 		return (isset($this->consoleApp));
 	}
-	public function setConsoleApp($consoleApp){
+	public function setConsoleApp(Application $consoleApp){
 		$this->consoleApp = $consoleApp;
 		return $this;
 	}
@@ -170,7 +171,7 @@ class App{
 		return [];
 	}
 
-	public function createKernel($class = null, $opts = null, $debug = null){
+	public function createKernel(?string $class = null, ?array $opts = null, ?bool $debug = null){
 		if(!$class){
 			$class = $this->getKernelClass();
 		}
@@ -192,7 +193,7 @@ class App{
 	public function hasKernel(){
 		return (isset($this->kernel));
 	}
-	public function setKernel($kernel){
+	public function setKernel(Kernel $kernel){
 		$this->kernel = $kernel;
 		return $this;
 	}
@@ -200,7 +201,7 @@ class App{
 	public function getKernelClass(){
 		return $this->kernelClass;
 	}
-	public function setKernelClass($class){
+	public function setKernelClass(string $class){
 		$this->kernelClass = $class;
 		return $this;
 	}
@@ -228,7 +229,7 @@ class App{
 	Method: run
 	Run application
 	*/
-	public function run($opts = []){
+	public function run(array $opts = []){
 		if($this->isCli()){
 			return $this->runConsole($opts);
 		}else{
@@ -263,7 +264,7 @@ class App{
 	Method: runWeb
 	Run web application
 	*/
-	public function runWeb($opts = []){
+	public function runWeb(array $opts = []){
 		if(!$this->isAllowedToRunWeb()){
 			header('HTTP/1.0 403 Forbidden');
 			exit('You are not allowed to access this file. Check App for more information.');
@@ -283,7 +284,7 @@ class App{
 		options(Map):
 			request(Request): specify an alternative request to process
 	*/
-	static public function processRequest($kernel, $opts = []){
+	static public function processRequest(Kernel $kernel, array $opts = []){
 		if(isset($opts['request'])){
 			$request = $opts['request'];
 		}else{
@@ -323,7 +324,7 @@ class App{
 		}
 		return $this->debug;
 	}
-	public function setDebug($debug){
+	public function setDebug(bool $debug){
 		$this->debug = $debug;
 		return $this;
 	}
@@ -344,7 +345,7 @@ class App{
 		}
 		return $this->environment;
 	}
-	public function setEnvironment($environment){
+	public function setEnvironment(string $environment){
 		$this->environment = $environment;
 		return $this;
 	}
@@ -358,12 +359,12 @@ class App{
 	public function getName(){
 		return $this->name;
 	}
-	protected function setName($value){
+	protected function setName(string $value){
 		$this->name = $value;
 		return $this;
 	}
 
-	public function addPaths($paths){
+	public function addPaths(array $paths){
 		foreach($paths as $name=> $path){
 			if(!$this->hasPath($name)){
 				$this->setPath($name, $path);
@@ -371,7 +372,7 @@ class App{
 		}
 		return $this;
 	}
-	public function getPath($name){
+	public function getPath(string $name){
 		if($this->hasPath($name)){
 			return $this->paths[$name];
 		}else{
@@ -430,18 +431,18 @@ class App{
 			}
 		}
 	}
-	public function hasPath($name){
+	public function hasPath(string $name){
 		return (isset($this->paths[$name]));
 	}
-	protected function mergeInPaths($paths){
+	protected function mergeInPaths(array $paths){
 		$this->paths = array_merge($this->paths, $paths);
 		return $this;
 	}
-	public function setPath($name, $value){
+	public function setPath(string $name, $value){
 		$this->paths[$name] = $value;
 		return $this;
 	}
-	public function setPaths($paths){
+	public function setPaths(array $paths){
 		$this->paths = $paths;
 		return $this;
 	}
