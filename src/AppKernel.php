@@ -50,7 +50,7 @@ class AppKernel extends Kernel{
 		return $this->app->initBundles();
 	}
 
-	public function registerContainerConfiguration(LoaderInterface $loader){
+	public function registerContainerConfiguration(LoaderInterface $loader): void{
 		$loader->load($this->app->getConfigPath($this->getEnvironment()));
 	}
 }

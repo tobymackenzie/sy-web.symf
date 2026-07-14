@@ -15,7 +15,7 @@
 	}
 	,"license": "0BSD"
 	,"require": {
-		"php": ">=5.4"
+		"php": ">=7.1"
 		,"symfony/http-kernel": ">=3.0 <7.0"
 	}
 	,"require-dev": {
