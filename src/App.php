@@ -9,24 +9,27 @@ use Symfony\Component\Debug\Debug as OldDebug;
 use Symfony\Component\ErrorHandler\Debug;
 
 class App{
+	//==config
 	protected array $bundlesList = [
 		'@standard'
 	];
-	//--console application instance
-	protected Application $consoleApp;
 	//--whether to enable Symfony debugging or not
 	protected bool $debug;
 	//--environment for Symfony kernel
 	protected string $environment;
 	//--whether app is being run as a CLI application
 	protected bool $isCli;
-	protected Kernel $kernel;
 	//--class to use when calling `createKernel()`
 	protected string $kernelClass = 'TJM\SyWeb\AppKernel';
 	//--name of app, as used for logs, front controller, etc
 	protected $name;
 	//--collection of paths to be used in early lifecycle
 	protected array $paths = [];
+
+	//==objects
+	//--console application instance
+	protected Application $consoleApp;
+	protected Kernel $kernel;
 
 	public function __construct(array $opts = []){
 		$opts = array_merge($this->getDefaultOptions(), $opts);
@@ -39,10 +42,6 @@ class App{
 			$this->run();
 		}
 	}
-
-	/*=====
-	==config
-	=====*/
 	public function set(array $opts = []){
 		if(isset($opts['bundles'])){
 			$this->setBundlesList($opts['bundles']);
@@ -73,6 +72,9 @@ class App{
 		return $this;
 	}
 
+	/*=====
+	==operation
+	=====*/
 	/*
 	Method: initBundles
 	Instantiates bundles and returns them as Array for Symfony's kernel.  Override to change which bundles are loaded.
@@ -130,47 +132,9 @@ class App{
 		}
 		return $this->initBundles($bundles);
 	}
-	public function setBundlesList($bundles){
-		$this->bundlesList = $bundles;
-		return $this;
-	}
-
-	/*
-	Method: getConfigPath
-	Get path to symfony config file.
-	*/
-	public function getConfigPath(?string $env = null){
-		if(!$env){
-			$env = $this->getEnvironment();
-		}
-		return $this->getPath('config.' . $env);
-	}
-
 	public function createConsoleApp(){
 		return new Application($this->getKernel());
 	}
-	public function getConsoleApp(){
-		if(!$this->hasConsoleApp()){
-			$this->setConsoleApp($this->createConsoleApp());
-		}
-		return $this->consoleApp;
-	}
-	public function hasConsoleApp(){
-		return (isset($this->consoleApp));
-	}
-	public function setConsoleApp(Application $consoleApp){
-		$this->consoleApp = $consoleApp;
-		return $this;
-	}
-
-	/*
-	Method: getDefaultOptions
-	Get default options for constructor.  Override to set default options.
-	*/
-	protected function getDefaultOptions(){
-		return [];
-	}
-
 	public function createKernel(?string $class = null, ?array $opts = null, ?bool $debug = null){
 		if(!$class){
 			$class = $this->getKernelClass();
@@ -184,39 +148,6 @@ class App{
 			return new $class(is_object($opts) ? $opts->getEnvironment() : $opts, $debug ?? $opts->getDebug());
 		}
 	}
-	public function getKernel(){
-		if(!$this->hasKernel()){
-			$this->setKernel($this->createKernel());
-		}
-		return $this->kernel;
-	}
-	public function hasKernel(){
-		return (isset($this->kernel));
-	}
-	public function setKernel(Kernel $kernel){
-		$this->kernel = $kernel;
-		return $this;
-	}
-
-	public function getKernelClass(){
-		return $this->kernelClass;
-	}
-	public function setKernelClass(string $class){
-		$this->kernelClass = $class;
-		return $this;
-	}
-
-	/*=====
-	==operation
-	=====*/
-	/*
-	Method: isAllowedToRunWeb
-	Check if we're allowed to run web.  Override for custom handling.
-	*/
-	protected function isAllowedToRunWeb(){
-		return true;
-	}
-
 	protected function enableDebug(){
 		if(class_exists(Debug::class)){
 			Debug::enable();
@@ -312,6 +243,41 @@ class App{
 	/*=====
 	==config
 	=====*/
+	/*
+	Method: isAllowedToRunWeb
+	Check if we're allowed to run web.  Override for custom handling.
+	*/
+	protected function isAllowedToRunWeb(){
+		return true;
+	}
+	public function setBundlesList($bundles){
+		$this->bundlesList = $bundles;
+		return $this;
+	}
+	protected function isCli(){
+		if(!isset($this->isCli)){
+			$this->isCli = (php_sapi_name() == 'cli');
+		}
+		return $this->isCli;
+	}
+	/*
+	Method: getConfigPath
+	Get path to symfony config file.
+	*/
+	public function getConfigPath(?string $env = null){
+		if(!$env){
+			$env = $this->getEnvironment();
+		}
+		return $this->getPath('config.' . $env);
+	}
+
+	/*
+	Method: getDefaultOptions
+	Get default options for constructor.  Override to set default options.
+	*/
+	protected function getDefaultOptions(){
+		return [];
+	}
 	public function getDebug(){
 		if(!isset($this->debug)){
 			if(getenv('APP_DEBUG') !== false){
@@ -328,7 +294,6 @@ class App{
 		$this->debug = $debug;
 		return $this;
 	}
-
 	public function getEnvironment(){
 		if(!isset($this->environment)){
 			if(getenv('APP_ENV') !== false){
@@ -349,13 +314,13 @@ class App{
 		$this->environment = $environment;
 		return $this;
 	}
-	protected function isCli(){
-		if(!isset($this->isCli)){
-			$this->isCli = (php_sapi_name() == 'cli');
-		}
-		return $this->isCli;
+	public function getKernelClass(){
+		return $this->kernelClass;
 	}
-
+	public function setKernelClass(string $class){
+		$this->kernelClass = $class;
+		return $this;
+	}
 	public function getName(){
 		return $this->name;
 	}
@@ -363,7 +328,6 @@ class App{
 		$this->name = $value;
 		return $this;
 	}
-
 	public function addPaths(array $paths){
 		foreach($paths as $name=> $path){
 			if(!$this->hasPath($name)){
@@ -444,6 +408,36 @@ class App{
 	}
 	public function setPaths(array $paths){
 		$this->paths = $paths;
+		return $this;
+	}
+
+	/*=====
+	==objects
+	=====*/
+	public function getConsoleApp(){
+		if(!$this->hasConsoleApp()){
+			$this->setConsoleApp($this->createConsoleApp());
+		}
+		return $this->consoleApp;
+	}
+	public function hasConsoleApp(){
+		return (isset($this->consoleApp));
+	}
+	public function setConsoleApp(Application $consoleApp){
+		$this->consoleApp = $consoleApp;
+		return $this;
+	}
+	public function getKernel(){
+		if(!$this->hasKernel()){
+			$this->setKernel($this->createKernel());
+		}
+		return $this->kernel;
+	}
+	public function hasKernel(){
+		return (isset($this->kernel));
+	}
+	public function setKernel(Kernel $kernel){
+		$this->kernel = $kernel;
 		return $this;
 	}
 }
