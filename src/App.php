@@ -1,6 +1,5 @@
 <?php
 namespace TJM\SyWeb;
-use BadMethodCallException;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\HttpFoundation\Request;
@@ -507,33 +506,5 @@ class App{
 	public function setPaths($paths){
 		$this->paths = $paths;
 		return $this;
-	}
-
-	/*=====
-	==class operation
-	=====*/
-	static public function callStatic($name, $args = null){
-		$instance = static::getSingleton();
-		if(method_exists($instance, $name)){
-			return call_user_func_array([$instance, $name], $args);
-		}else{
-			throw new BadMethodCallException();
-		}
-	}
-	/*
-	Static Method: getSingleton
-	Get a singleton instance of this class to allow us to avoid creating a global instance.
-	Arguments:
-		$opts (Array|Optional): Array of options to pass to the constructor if not instantiated yet.
-	*/
-	static protected $singletonInstance;
-	static public function getSingleton($opts = []){
-		//-# using 'self' ensures we get an instance of a child class if that is what has been gotten.
-		if(self::$singletonInstance === null){
-			self::$singletonInstance = new static($opts);
-		}elseif(count($opts)){
-			throw new \Exception('Singleton already exists.  Cannot pass in options.');
-		}
-		return self::$singletonInstance;
 	}
 }
