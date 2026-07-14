@@ -26,8 +26,6 @@ class App{
 	protected $name;
 	//--collection of paths to be used in early lifecycle
 	protected $paths = [];
-	//--value to set umask to.  By default, doesn't set.  See [Setting up permissions docs](https://symfony.com/doc/current/setup/file_permissions.html).
-	protected $umask = false;
 
 	public function __construct($opts = []){
 		$opts = array_merge($this->getDefaultOptions(), $opts);
@@ -69,9 +67,6 @@ class App{
 		}
 		if(isset($opts['paths'])){
 			$this->mergeInPaths($opts['paths']);
-		}
-		if(isset($opts['umask'])){
-			$this->setUmask($opts['umask']);
 		}
 
 		return $this;
@@ -210,17 +205,6 @@ class App{
 		return $this;
 	}
 
-	public function getUmask(){
-		return $this->umask;
-	}
-	public function setUmask($value){
-		if($value === true){
-			$value = 0;
-		}
-		$this->umask = $value;
-		umask($this->umask);
-		return $this;
-	}
 	/*=====
 	==operation
 	=====*/
