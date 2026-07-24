@@ -10,9 +10,7 @@ use Symfony\Component\ErrorHandler\Debug;
 
 class App{
 	//==config
-	protected array $bundlesList = [
-		'@standard'
-	];
+	protected array $bundlesList = ['@standard'];
 	//--whether to enable Symfony debugging or not
 	protected bool $debug;
 	//--environment for Symfony kernel
@@ -98,10 +96,8 @@ class App{
 				$initedBundles[] = $bundle;
 			}elseif($bundle === '@standard'){
 				$initedBundles = array_merge($initedBundles, $this->initStandardEditionBundles());
-			}else{
-				if(class_exists($bundle)){
-					$initedBundles[] = new $bundle();
-				}
+			}elseif(class_exists($bundle)){
+				$initedBundles[] = new $bundle();
 			}
 		}
 		return $initedBundles;
@@ -115,14 +111,14 @@ class App{
 		$bundles = [
 			//--standard
 			//---framework
-			'Symfony\Bundle\FrameworkBundle\FrameworkBundle'
+			'Symfony\Bundle\FrameworkBundle\FrameworkBundle',
 			//---standard symfony
-			,'Symfony\Bundle\SecurityBundle\SecurityBundle'
-			,'Symfony\Bundle\TwigBundle\TwigBundle'
-			,'Symfony\Bundle\MonologBundle\MonologBundle'
-			,'Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle'
-			,'Doctrine\Bundle\DoctrineBundle\DoctrineBundle'
-			,'Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle'
+			'Symfony\Bundle\SecurityBundle\SecurityBundle',
+			'Symfony\Bundle\TwigBundle\TwigBundle',
+			'Symfony\Bundle\MonologBundle\MonologBundle',
+			'Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle',
+			'Doctrine\Bundle\DoctrineBundle\DoctrineBundle',
+			'Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle',
 		];
 
 		if(in_array($this->getEnvironment(), ['dev', 'test'])) {
