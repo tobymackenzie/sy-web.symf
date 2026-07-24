@@ -8,11 +8,11 @@ class AppKernel extends Kernel{
 	protected App $app;
 	public function __construct($appOrEnv = null, ?bool $debug = null){
 		if(!$appOrEnv){
-			$appOrEnv = App::getSingleton();
+			$appOrEnv = new App();
 		}elseif(is_string($appOrEnv)){
 			//--support symfony kernel interface.  We need a better way to go about this.  This is a stopgap
 			$env = $appOrEnv;
-			$appOrEnv = App::getSingleton();
+			$appOrEnv = new App();
 			$appOrEnv->setEnvironment($env);
 			if($debug){
 				$appOrEnv->setDebug($debug);
